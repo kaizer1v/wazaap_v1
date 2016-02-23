@@ -1,0 +1,102 @@
+
+/* `Basic HTML
+----------------------------------------------------------------------------------------------------*/
+
+body {
+	font: 13px/1.5 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+	overflow-y:scroll !important;
+}
+
+a:focus {
+	
+}
+
+hr {
+	border: 0 #ccc solid;
+	border-top-width: 1px;
+	clear: both;
+	height: 0;
+}
+
+/* `Headings
+----------------------------------------------------------------------------------------------------*/
+
+h1 {
+	font-size: 25px;
+}
+
+h2 {
+	font-size: 23px;
+}
+
+h3 {
+/*
+	font: 25px Calibri, Verdana, sans-serif;
+*/
+	font: 25px 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+	color:#000;
+	line-height:25px;
+}
+
+h4 {
+/*
+	font: 20px Calibri, Verdana, sans-serif;
+*/
+	font: 20px 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+	color:#000;
+	line-height:20px;
+}
+
+h5 {
+/*
+	font: 16px Calibri, Verdana, sans-serif;
+*/
+	font: 16px 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+	color:#000;
+	line-height:16px;
+}
+
+h6 {
+	font-size: 15px;
+	line-height:15px;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{
+	text-decoration:none;
+	color:#000;
+	/*font-weight: bold;*/
+}
+
+/* `Spacing
+----------------------------------------------------------------------------------------------------*/
+
+ol {
+	
+}
+
+ul {
+	
+}
+
+li {
+	
+}
+
+p,
+dl,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+ul,
+pre,
+table,
+address,
+fieldset {
+	
+}
+

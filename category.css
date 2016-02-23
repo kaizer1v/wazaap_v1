@@ -1,0 +1,460 @@
+ .container{
+	width:700px;
+	background:url(./images/category-detail-bg.png) repeat-y right;
+	display:none;
+	float:left;
+ }
+ 
+ .inner-page{
+	width:692px;
+ }
+ 
+ /*
+ .top-bar {
+	width:100%;
+	height:60px;
+	background:url(./images/yellow.png) repeat transparent;
+	border:1px #615e65 dotted;
+ }
+ 
+ .top-bar h2{
+	font:25px calibri, verdana, arial, sans-serif  !important;
+	color:#fff;
+	line-height:25px !important;
+	text-indent:8px;
+	margin-top:18px;
+	float:left;
+ }
+ */
+
+.sideCatTitle {
+	font:22px calibri,sans-serif;
+	color:#fff;
+	float:right;
+	margin-right:8px;
+}
+.sideCatTitle a {
+	color: #fff;
+	text-decoration: none;
+}
+ 
+ .ml20{
+	margin-left:20px !important;
+ }
+ 
+ .slides{
+	margin-left:20px;
+	margin-top:15px;
+ }
+ 
+ .slides span, .slider{
+	float:left;
+	margin-left:5px;
+	color:#fff;
+	font:10px verdana, arial, sans-serif;
+ }
+ /*
+ .category-post{
+	height:200px;
+	background:url(./images/yellow-bg.png) repeat-x transparent;
+	border-bottom:1px #999 dashed;
+ }
+ */
+ .post-image{
+ 	/*
+	width:129px;
+	height:180px;
+	background:url(./images/post-image.png) no-repeat transparent;
+	*/
+	float:left;
+	
+	margin-top: 10px;
+ }
+ 
+.i2{
+	background:url(./images/2.png) no-repeat transparent;
+}
+
+.i3{
+	background:url(./images/3.png) no-repeat transparent;
+}
+
+.i4{
+	background:url(./images/4.png) no-repeat transparent;
+}
+
+.i5{
+	background:url(./images/5.png) no-repeat transparent;
+}
+ 
+ .post-data{
+	margin:10px 10px 0 11px;
+	float:left;
+	width:380px;
+	height:180px;
+	position:relative;
+ }
+ 
+ .post-data{
+	font:20px Calibri, verdana, sans-serif;
+	line-height:20px;
+ }
+ 
+ .post-data p{
+	font:12px/15px 'Helvetica Neue',Arial,'Liberation Sans',FreeSans,sans-serif;
+	margin-bottom:10px;
+	margin-top:5px;
+ }
+ 
+ .post-title:hover{
+	text-decoration:underline;
+ }
+ 
+ 					span.loc{
+						background:url(./images/location.png) no-repeat left top transparent; 
+					}
+					span.time{
+						background:url(./images/time.png) no-repeat left top transparent; 
+					}
+					span.price{
+						background:url(./images/price.png) no-repeat left top transparent; 
+						padding-bottom:2px;
+					}
+ 
+ .post-meta{
+	float:right;
+	width:150px;
+	position:relative;
+	height:190px;
+ }
+ 
+ .post-data span{
+	display:block;
+	text-indent:20px;
+/*	font:12px verdana, sans-serif;*/
+	font:12px/15px 'Helvetica Neue',Arial,'Liberation Sans',FreeSans,sans-serif;
+	margin-top:6px;
+	padding:1px 0;
+ }
+ 
+ .post-data .footnote{
+	position:absolute;
+	bottom:0;
+	left:0;
+	color:#000;
+	font:12px arial, sans-serif;
+	margin:10px 0 0 0 !important;
+	
+ }
+ 
+ .hide-this{
+	position:absolute;
+	right:10px;
+	top:10px;
+	cursor:pointer;
+ }
+ 
+ .thumb{
+	background:url(./images/meta-icons.png) no-repeat transparent;
+	height:23px;
+	width:31px;
+	float:left;
+ }
+ 
+ .zaaperDiv { margin-top:10px; }
+ .zaaper{
+	background:url(./images/meta-icons.png) no-repeat 0 -23px transparent;
+	height:23px;
+	width:31px;
+	float:left;
+ }
+ .share, .rsvp, .post-comment, .countMeIn{
+	float:left;
+	margin-right:6px;
+	border: none;
+/*
+	border-top: 1px solid #A75E0C;
+	border-bottom: 1px solid #F9DCC3;
+*/
+	background: url(images/button-bg.png) repeat-x;
+	color:#fff;
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	padding:5px 15px;
+	font:10px verdand, arial, sans-serif;
+	cursor:pointer;
+ }
+ .shareEventListing { margin-left: -29px; }
+ 
+ .post-comment { margin-left: 10px; }
+ 
+ .rsvp{
+/*
+	background:url(./images/drop-down-white.png) no-repeat 50px center #330000;
+*/
+	background: url(images/button-bg.png) repeat-x;	
+	padding-right:25px !important;
+ }
+ 
+ .respond{
+	margin-top:75px;
+	position: relative;
+ }
+ 
+ .shareBox {
+	position: absolute;
+	width: 243px;
+	left: -30px;
+	top: 24px;
+	z-index: 99999999;
+	border: 1px solid #919191;
+	background: url(./images/sharebox-bg.png) #fff repeat-x bottom;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+ }
+ .share_details div, .buttons { margin: 10px; }
+ .share_details div input[type=text] { width: 195px; border-collapse: collapse; border: 1px solid #919191; }
+ .addEmail, .removeEmail { margin-left: 5px; }
+ .addEmail {
+	background: url(./images/add.png) no-repeat;
+	border: 0 none;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+ }
+ .removeEmail {
+	background: url(./images/remove.png) no-repeat;
+	border: 0 none;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+ }
+ .cancelShare, .sendEmail {
+	background: url(./images/share-button.png) repeat-x;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	color: #fff;
+	cursor: pointer;
+ }
+ 
+ .pagination{
+	float:right;
+/* background:#fff; */
+	margin-right:10px;
+	margin-top:10px;
+	padding:2px;
+ }
+ 
+ .pagination a{
+	padding:3px 5px;
+	text-decoration:none;
+	background:url(./images/button-grd.png) repeat-y #fff;
+	border:1px #d3d3d3 solid;
+	color:#336699;
+	float:left;
+ }
+ 
+ .paginate-list{
+	list-style:none;
+	float:left;
+ }
+ 
+ .paginate-list li{
+	float:left;
+	margin-left:5px;
+	background:url(./images/button-grd.png) repeat-y #fff;
+	border:1px #d3d3d3 solid;
+	color:#336699;
+	padding:3px 5px;
+	cursor:pointer;
+ }
+ 
+ .paginate-list li:hover, .prev-paginate:hover, .next-paginate:hover{
+	border:1px #330000 solid;
+ }
+ 
+.next-paginate{
+	margin-left:5px;
+}
+
+.post-title{
+	text-decoration:none;
+	color:#000;
+}
+
+.mt35{
+	margin-top:35px;
+}
+
+.current-page{
+	background:none #330000 !important;
+	border:0 !important;
+	color:#fff !important;
+}
+
+.sidebar-category{
+	position:relative;
+	height:205px;
+	border:1px #615e65 dotted;
+}
+
+.small-sized{
+	width:120px;	
+}
+
+.big-sized{
+	width:173px;	
+}
+
+/*
+.bluebg{
+	background:url(./images/blue.png) repeat;
+}
+.redbg{
+	background:url(./images/red.png) repeat;
+}
+.greenbg{
+	background:url(./images/green.png) repeat;
+}
+.purplebg{
+	background:url(./images/purple.png) repeat;
+}
+*/
+
+.ml10{
+	margin-left:10px;
+}
+
+.catAtt {
+	background:#999;
+	margin:10px;
+	width:100px;
+	height:100px;
+}
+.singleAtt {
+	margin-left:10px;
+	margin-top:10px;
+	float:left;
+}
+.eventLogo {
+	background: url(images/event-logo.png) no-repeat;
+	float:left;
+	margin-left:5px;
+	margin-top:5px;
+	width: 37px;
+	height: 36px;
+}
+
+/* ==================================================================================================== */
+/* As for wazaap.in/wordpress and NOT demo.amiworks.co.in/wazzap
+ * 
+ * Category ID	Category Name	Colour - Name		Old Category
+ * -----------	-------------	-------------		------------
+ * 			 7	My|Box			#99cc99 - Green		Entertainment
+ * 			 3	Loot!			#ffff66 - Yellow	Culture
+ * 			 4	Nightlife		#66cccc - Blue		Nightlife
+ * 			 5	Offbeat			#ff9966 - Red		Activity
+ * 			 6	Challenges		#ffccff - Purple	Community
+ */
+
+/* Class names are assigned as per the category name itself */
+.add-new .menu .cat-7					{ background:#99cc99; } /* My|Box */
+.add-new .menu .cat-3					{ background:#ffff66; } /* Loot! */
+.add-new .menu .cat-4					{ background:#66cccc; } /* Nightlife */
+.add-new .menu .cat-5					{ background:#ff9966; } /* Offbeat */
+.add-new .menu .cat-6					{ background:#ffccff; } /* Challenges */
+
+.top-bar-6, .top-bar-5, .top-bar-3, .top-bar-4, .top-bar-7 {
+	width:100%;
+	height:60px;
+	border:1px #615e65 dotted;
+}
+	.top-bar-6 							{ background:url(./images/purple.png) repeat transparent; }
+	.top-bar-5							{ background:url(./images/red.png) repeat transparent; }
+	.top-bar-3							{ background:url(./images/yellow.png) repeat transparent; }
+	.top-bar-4							{ background:url(./images/blue.png) repeat transparent; }
+	.top-bar-7							{ background:url(./images/green.png) repeat transparent;}
+
+.top-bar-6 h2, .top-bar-5 h2, .top-bar-3 h2, .top-bar-4 h2, .top-bar-7 h2 {
+	font:25px calibri, verdana, arial, sans-serif  !important;
+	color:#fff;
+	line-height:25px !important;
+	text-indent:8px;
+	margin-top:18px;
+	float:left;
+}
+
+.category-post-6, .category-post-5, .category-post-3, .category-post-4, .category-post-7 {
+	height: 215px;
+	border-bottom: 1px #999 dashed;
+}
+ 	.category-post-6					{ background:url(./images/purple-bg.png) repeat-x left bottom transparent; }
+ 	.category-post-5					{ background:url(./images/red-bg.png) repeat left bottom transparent; }
+ 	.category-post-3					{ background:url(./images/yellow-bg.png) repeat-x left bottom transparent; }
+ 	.category-post-4					{ background:url(./images/blue-bg.png) repeat-x left bottom transparent; }
+ 	.category-post-7					{ background:url(./images/green-bg.png) repeat-x left bottom transparent; }
+
+/*
+ 	.category-post-6					{ background:white; }
+ 	.category-post-5					{ background:white; }
+ 	.category-post-3					{ background:white; }
+ 	.category-post-4					{ background:white; }
+ 	.category-post-7					{ background:white; }
+*/
+ 	
+	.leftbg-6, .rightbg-6 				{ background:url(./images/purple.png) repeat; }
+	.leftbg-5, .rightbg-5				{ background:url(./images/red.png) repeat; }
+	.leftbg-3, .rightbg-3				{ background:url(./images/yellow.png) repeat; }
+	.leftbg-4, .rightbg-4				{ background:url(./images/blue.png) repeat; }
+	.leftbg-7, .rightbg-7				{ background:url(./images/green.png) repeat; }
+
+	.thumb-text-6, .thumb-text-5, .thumb-text-3, .thumb-text-4, .thumb-text-7,
+	.zaap-text-6, .zaap-text-5, .zaap-text-3, .zaap-text-4, .zaap-text-7 {
+		border-radius:5px;
+		float:left;
+		width:110px;
+		text-indent:8px;
+		padding:5px 0;
+		font:10px verdana, arial, sans-serif;
+		color:#330000;
+	}
+	.thumb-text-6, .zaap-text-6						{ background: #C7AAE5; }
+	.thumb-text-5, .zaap-text-5						{ background: #DD956F; }
+	.thumb-text-3, .zaap-text-3						{ background: #DDC371; }
+	.thumb-text-4, .zaap-text-4						{ background: #8FC4CC; }
+	.thumb-text-7, .zaap-text-7						{ background: #94C498; }
+
+	
+	.categorylist-meta-cont{
+		position:absolute;
+		left:0;
+		bottom:0;
+	}
+	
+	.eventdetail-loc{
+		height:35px !important;;
+	}
+	
+	
+.sliderhw{
+	height:180px;
+	width:130px;
+	margin:0 10px 0 0 !important;
+}
+
+
+.cate-3{background-color: rgb(255, 255, 102) ! important;}
+.cate-4{background-color: rgb(102, 204, 204) ! important;}
+.cate-5{background-color: rgb(255, 153, 102) ! important;}
+.cate-6{background-color: rgb(255, 204, 255) ! important;}
+.cate-7{background-color: rgb(153, 204, 153) ! important;}
+
+.stack120{
+	height:120px;
+	width:120px;
+}

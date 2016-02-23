@@ -1,0 +1,592 @@
+<script type="text/javascript">
+//This variable is to send a JSON object from PHP to Javascript with the 
+//set of selected Category to show on the Zaap-Bar
+var sessionData = {};
+</script>
+<?php get_header(); ?>
+<?php
+	/*This should always be at top, commented by Aman and added to header.php*/
+	//session_start();
+?>
+<?php
+	#Gets the 5 Parent Category Names
+	$args = array(
+		'type'			=>'post',
+		'orderby'		=>'id',
+		'exclude'		=>'1',
+		'parent'		=>'0',
+	);
+	$parentCategories = get_categories( $args );
+	
+	#For storing Parent Category Names
+	foreach($parentCategories as $parentCategory) {
+		$cats[] = $parentCategory->name;
+	}
+	#Array with parentID -> array of child IDs it's an Associative Array
+	foreach($parentCategories as $parentCategory) {
+		$temp = array();
+		$childCats = get_categories(array( 'child_of' => $parentCategory->cat_ID ));
+		foreach($childCats as $childCat) {
+			array_push($temp, $childCat->cat_ID);
+		}
+		$parentChild[$parentCategory->cat_ID] = $temp;		
+	}
+	//$limit_post stores the number of posts needed to be retrieved for each category.
+	$limit_post = array(
+		'3' => '5',
+		'4' => '4',
+		'5' => '4',
+		'6' => '4',
+		'7' => '4'
+	);
+
+	$title_count = array(	
+		0 => array(1=>24,2=>20,3=>14,4=>26,5=>10),
+		1 => array(1=>25,2=>15,3=>35,4=>30),	
+		2 => array(1=>20,2=>31,3=>28,4=>15),
+		3 => array(1=>41,2=>25,3=>14,4=>14),
+		4 => array(1=>20,2=>16,3=>12,4=>25)
+	);
+	$address_length = array(
+		0 => array(1=>33,2=>13,3=>22,4=>16,5=>16),
+		1 => array(1=>22,2=>12,3=>14,4=>22),
+		2 => array(1=>19,2=>14,3=>14,4=>20),
+		3 => array(1=>25,2=>12,3=>11,4=>30),
+		4 => array(1=>18,2=>12,3=>12,4=>23)
+	);
+	
+	$allposts = array();
+	function sort_and_reset($value, $key) {
+		global $userPostCatID;
+		global $post;
+		global $allposts;
+		
+		if(array_search($userPostCatID[0]->cat_ID, $value) !== false) {
+			$allposts[$key][] = $post;
+		}
+		elseif($userPostCatID[0]->cat_ID == $key) {
+			$allposts[$key][] = $post;
+		}
+	}
+	//Retrieve all information from the session
+	//session_destroy(); 
+	$catIDs = $_SESSION['catIDs'];		
+	$userStartYear = $_SESSION['userStartYear'];
+	$userStartMonth = $_SESSION['userStartMonth'];
+	$userStartDay = $_SESSION['userStartDay'];
+	$userEndDay	= $_SESSION['userEndDay'];
+	$userEndMonth	= $_SESSION['userEndMonth'];
+	$userEndYear = $_SESSION['userEndYear'];
+	//Check if they are set in the session
+	if($catIDs=='' or $userStartYear=='' or $userStartMonth=='' or $userStartDay=='')
+	{
+	//Not in Session so create a Zaap with all 5 categories for "This Week"
+		foreach($parentChild as $parentCatID => $childCatID) {
+				$catIDs[] = $parentCatID;
+		}
+		$userStartYear = date('Y');
+		$userStartMonth = date('m');
+		$userStartDay = date('d');
+		$userEndDay 			= date('d', strtotime('next Saturday'));
+		$userEndMonth 			= date('m', strtotime('next Saturday'));
+		$userEndYear 			= date('Y', strtotime('next Saturday'));
+		if(is_user_logged_in()) {
+			$serUserFilter = get_user_meta($current_user->ID, 'user_filter', true);
+			$userFilter = unserialize($serUserFilter);
+			$serUserCatIDs 			= $userFilter['catIDs'];			#This is an array
+			if($serUserCatIDs == '') { 									#Not in usermeta table so store it there
+			//Save all the values in usermeta
+			$info = array(
+				'catIDs'	=> $catIDs,
+				'userStartDay' 	=> $userStartDay,
+				'userStartMonth' 	=> $userStartMonth,
+				'userStartYear' 	=> $userStartYear,
+				'userEndDay' 		=> $userEndDay,
+				'userEndMonth' 	=> $userEndMonth,
+				'userEndYear' 		=> $userEndYear,
+			);
+			$serInfo = serialize($info);
+			update_user_meta($current_user->ID, 'user_filter', $serInfo);
+			}
+		}
+			//Save values in Session
+			$_SESSION['catIDs']=$catIDs; 
+			$_SESSION['userStartYear']=$userStartYear; 
+			$_SESSION['userStartMonth']=$userStartMonth; 
+			$_SESSION['userStartDay']=$userStartDay; 
+			$_SESSION['userEndDay']=$userEndDay; 
+			$_SESSION['userEndMonth']=$userEndMonth; 
+			$_SESSION['userEndYear']=$userEndYear;
+		}
+		?>
+			<script language="javascript">
+				sessionData.catIDs = <?php echo json_encode($catIDs); ?>;
+				sessionData.startDate = <?php echo $userStartDay; ?>;
+				sessionData.startMonth = <?php echo $userStartMonth; ?>;
+				sessionData.startYear = <?php echo $userStartYear; ?>;
+				sessionData.endDate = <?php echo $userEndDay; ?>;
+				sessionData.endMonth = <?php echo $userEndMonth; ?>;
+				sessionData.endYear = <?php echo $userEndYear; ?>;
+			</script>
+<?php
+			//For each category
+			foreach($catIDs as $userCatID) {
+				global $wpdb;				
+				$userPostIDs = $wpdb->get_results("SELECT DISTINCT post_id FROM wp_lookup WHERE starts_on>='".$userStartYear.'-'.'06'.'-'.$userStartDay."' AND term_taxonomy_id=".$userCatID." ORDER BY starts_on LIMIT 10");				
+				$allUserPostIDs = array();
+				foreach($userPostIDs as $pids) {
+					array_push($allUserPostIDs, $pids->post_id);
+				}
+				foreach($allUserPostIDs as $post) {
+					$post = get_post($post);
+					$userPostCatID = get_the_category($post->ID);
+					array_walk($parentChild, 'sort_and_reset');
+				}			
+				$post_args = array(
+					'numberposts'	=> $limit_post[$parentCatID],
+					'post__in'		=> $allPostIDs
+				);
+				$allposts[$parentCatID] = get_posts($post_args);
+				//What happens if the number of posts is less than required?
+			}
+
+			$t[0]=$allposts[3];
+			$t[1]=$allposts[4];
+			$t[2]=$allposts[5];
+			$t[3]=$allposts[6];
+			$t[4]=$allposts[7];
+			
+			$imgsizes = array(
+				1 => array(
+							1 => array(0 => 104, 1 => 153),
+							2 => array(0 => 155, 1 => 73),
+							3 => array(0 => 161, 1 => 125),
+							4 => array(0 => 155, 1 => 71),
+							5 => array(0 => 99, 1 => 184),
+						),
+				2 => array(
+							1 => array(0 => 181, 1 => 83),
+							2 => array(0 => 48, 1 => 105),
+							3 => array(0 => 71, 1 => 120),
+							4 => array(0 => 152, 1 => 98),
+						),
+				4 => array(
+							1 => array(0 => 250, 1 => 132),
+							2 => array(0 => 126, 1 => 112),
+							3 => array(0 => 55, 1 => 77),
+						),
+				5 => array(
+							1 => array(0 => 190, 1 => 74),
+							2 => array(0 => 77, 1 => 123),
+							3 => array(0 => 67, 1 => 84),
+							4 => array(0 => 190, 1 => 360),
+						),
+				3 => array(
+							1 => array(0 => 153, 1 => 44),
+							2 => array(0 => 71, 1 => 122),
+							3 => array(0 => 116, 1 => 168),
+							4 => array(0 => 115, 1 => 97),
+						),
+			);
+?>
+	<script type="text/javascript">
+<?php
+		foreach($t as $ckey => $cat_post ) {
+			$blockid = $ckey+1;
+?>
+			var block<?php echo $blockid ?> = {
+<?php
+				$i = 0;
+				$postcnt = count($cat_post);
+				foreach($cat_post as $pkey=>$post) {
+					
+					$i++;
+					$img_id = get_post_thumbnail_id($post->ID);
+					//$img_arr = wp_get_attachment_image_src($img_id,'block'.$blockid.'-box'.$i.'' );
+					$arr = wp_get_attachment_image_src($img_id);
+					//$tempurl = bloginfo('template_url');
+					//$img_arr[0] = "var/www/wazaap/html/wp-content/themes/wazaap/
+					
+					$custom_fields = get_post_custom($post->ID);
+
+					if($custom_fields['WZ_venue'][0] != "")
+						$wz_address = $custom_fields['WZ_venue'][0];
+					
+					else
+						$wz_address = $custom_fields['WZ_address'][0];
+
+					if($custom_fields['WZ_date'][0] != "")
+						$wz_date = $custom_fields['WZ_date'][0]." ".$custom_fields['WZ_date_end'][0];
+						$wz_date_display = date('D M d',strtotime($custom_fields['WZ_date'][0]));
+
+					if($custom_fields['WZ_cost'][0] != "")
+						$wz_cost = $custom_fields['WZ_cost'][0];
+
+?>
+					"box<?php echo $i?>":[{
+						// **********************
+						//Uncomment the following line when: you want to have limited characters
+						//"title":"<?php echo "<a href='".get_permalink($post->ID)."'>".substr($post->post_title,0 ,$title_count[$ckey][$i])."</a>"?>",
+						// **********************
+						"title":"<?php echo "<a href='".get_permalink($post->ID)."'>".$post->post_title."</a>"?>",
+						"loc":"<?php echo $wz_address; ?>",
+						"time":"<?php echo $wz_date; ?>",
+						"price":"<?php echo $wz_cost ?>",
+						"image":'<?php echo bloginfo("template_url")."/timthumb.php?src=".$arr[0]."&w=".$imgsizes[$blockid][$i][0]."&h=".$imgsizes[$blockid][$i][1]; ?>',
+						"display_time":"<?php echo $wz_date_display; ?>"
+					}]
+<?php
+					if($postcnt != $i) {	
+?>,
+<?php
+					}
+				}
+?>
+			};
+<?php
+		} #END foreach
+?>
+
+	
+	</script>
+<?php
+	
+	$str_cat = '"'.implode("\",\"", $cats).'"';
+	
+?>
+	<script type="text/javascript">
+
+		var menu = [<?php echo $str_cat ?>];
+	</script>	
+	<div class="main">
+		<div class="box1">
+			<div class="sq1-1 yellow indiv">
+				<div class="m-9">
+					<div class="left f-img-1"></div>
+					<div class="left desc">
+						<h4></h4>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+			</div>
+			<div class="sq1-2 yellow indiv">
+				<div class="m-9">
+					<div class="f-img-2"></div>
+					
+					<div class="desc">
+						<h5></h5>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+			</div>
+			<div class="sq1-3 yellow indiv">
+					<div class="m-9">
+						<div class="f-img-4"></div>
+						<div class="desc">
+							<h5></h5>
+							<div class="metaContent">
+								<span class="loc"></span>
+								<span class="time"></span>
+								<span class="price"></span>
+							</div>
+						</div>
+					</div>	
+			</div>
+			<div class="sq1-4 yellow indiv">
+					<div class="m-9">
+						<div class="left f-img-5"></div>
+						
+						<div class="left desc">
+							<h3></h3>
+							<div class="metaContent">
+
+								<span class="loc"></span>
+								<span class="time"></span>
+								<span class="price"></span>
+							</div>
+						</div>					
+					</div>
+			</div>
+		</div>
+		
+		<div class="box2">
+			<div class="left" style="width:184px;">
+				<div class="sq2-1 yellow indiv">
+					<div class="m-9">
+						<div class="f-img-3"></div>
+						
+						<div class="desc">
+							<h5></h5>
+							<div class="metaContent">
+								<span class="loc"></span>
+								<span class="time"></span>
+								<span class="price"></span>
+							</div>
+						</div>					
+					</div>				
+				</div>
+				<?php
+				$link_cnt = 1;
+				foreach($parentCategories as $key=>$category) {
+					$link_cnt++;
+					?>
+					<div class="sq2-<?php echo $link_cnt ?>">
+						<a href="<?php echo get_option('siteurl')."/?category_name=".$category->slug ?>"></a>
+					</div>	
+				<?php
+				}
+				?>
+
+			</div>
+			
+			<div class="left" style="width:198px;height:329px;">
+				<div class="sq2-7 blue  indiv">
+					<div class="m-9">
+						<div class="f-img-6"></div>
+						
+						<div class="desc">
+							<h4></h4>
+							<div class="metaContent">
+								<span class="loc"></span>
+								<span class="time"></span>
+								<span class="price"></span>
+							</div>
+						</div>					
+					</div>
+				</div>
+				<div class="sq2-8 blue indiv">
+					<div class="m-9">
+						<div class="left f-img-7"></div>
+						
+						<div class="left desc">
+							<h5></h5>
+							<div class="metaContent">
+								<span class="loc"></span>
+								<span class="time"></span>
+								<span class="price"></span>
+							</div>
+						</div>					
+					</div>
+				</div>
+			</div>
+			
+			<div class="left" style="width:171px;height:329px;">
+				<div class="sq2-9 blue indiv">
+					<div class="m-9">
+						<div class="left f-img-8"></div>
+						
+						<div class="left desc">
+							<h4></h4>
+							<div class="metaContent">
+								<span class="loc"></span>
+								<span class="time"></span>
+								<span class="price"></span>
+							</div>
+						</div>					
+					</div>
+				</div>
+				<div class="sq2-10 blue indiv">
+					<div class="m-9">
+						<div class="f-img-9"></div>
+						
+						<div class="desc">
+							<h5></h5>
+							<div class="metaContent">
+								<span class="loc"></span>
+								<span class="time"></span>
+								<span class="price"></span>
+							</div>
+						</div>					
+					</div>
+				</div>				
+			</div>
+			
+			<div style="width:370px;height:140px;float:left;">
+				<div class="sq2-11 red indiv">
+				<div class="m-9">
+					<div class="f-img-19"></div>
+					
+					<div class="desc">
+						<h5></h5>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+				</div>				
+				
+				<div class="sq2-12 red indiv">
+					<div class="m-9">
+						<div class="left f-img-20"></div>
+						
+						<div class="left desc">
+							<h5></h5>
+							<div class="metaContent">
+								<span class="loc"></span>
+								<span class="time"></span>
+								<span class="price"></span>
+							</div>
+						</div>					
+					</div>
+				</div>				
+			</div>
+		</div>
+		
+		<div class="box3">
+			<div class="sq3-1 purple indiv">
+					<div class="m-9">
+						<div class="f-img-10"></div>
+						
+						<div class="desc">
+							<h3></h3>
+							<div class="metaContent">
+								<span class="loc"></span>
+								<span class="time"></span>
+								<span class="price"></span>
+							</div>
+						</div>					
+					</div>			
+			</div>
+			<div class="sq3-2 purple indiv">
+				<div class="m-9">
+					<div class="left f-img-11"></div>
+					
+					<div class="left desc">
+						<h5></h5>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+			</div>
+		</div>
+		
+
+		<div class="box4 purple  indiv">
+				<div class="m-9">
+					<div class="left f-img-12"></div>
+					
+					<div class="left desc">
+						<h5></h5>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+		</div>
+		
+		<div class="box5">
+			<div class="left">
+				<div class="sq5-1 green indiv">
+				<div class="m-9">
+					<div class="f-img-13"></div>
+					
+					<div class="desc">
+						<h3></h3>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+				</div>
+				<div class="sq5-4 green indiv">
+				<div class="m-9">
+					<div class="left f-img-14"></div>
+					
+					<div class="left desc">
+						<h5></h5>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+				</div>
+			</div>
+			<div class="left"> 
+				<div class="sq5-2 green indiv">
+				<div class="m-9">
+					<div class="left f-img-15"></div>
+					
+					<div class="left desc">
+						<h4></h4>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+				</div>
+				<div class="sq5-5 green indiv">
+				<div class="m-9">
+					<div class="f-img-16"></div>
+					
+					<div class="desc">
+						<h5></h5>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+				</div>
+			</div>
+			
+			<div class="left">
+				<div class="sq5-3 red indiv">
+				<div class="m-9">
+					<div class="left f-img-17"></div>
+					
+					<div class="left desc">
+						<h3></h3>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+				</div>
+				
+				<div class="sq5-6 red indiv">
+				<div class="m-9">
+					<div class="left f-img-18"></div>
+					
+					<div class="left desc">
+						<h5></h5>
+						<div class="metaContent">
+							<span class="loc"></span>
+							<span class="time"></span>
+							<span class="price"></span>
+						</div>
+					</div>					
+				</div>
+				</div>
+			</div>
+			
+		</div>		
+		
+		<div class="clear">
+			
+		</div>
+	</div>
+<div style="margin-top: 20px;"><?php get_footer(); ?>
